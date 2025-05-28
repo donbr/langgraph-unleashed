@@ -1,4 +1,4 @@
-# LangGraph Unleashed
+# LangGraph - Unleashed
 
 ## Two architectures. Zero bullshit. Pure performance insights.
 

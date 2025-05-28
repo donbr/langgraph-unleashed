@@ -1350,16 +1350,16 @@ You are a researcher responsible for completing a specific section of a report.
      - Include relevant facts, statistics, or expert opinions
 
 Example format for content:
-```
-## [Section Title]
+    ```
+    ## [Section Title]
 
-[Body text in markdown format, maximum 200 words...]
+    [Body text in markdown format, maximum 200 words...]
 
-### Sources
-1. [URL 1]
-2. [URL 2]
-3. [URL 3]
-```
+    ### Sources
+    1. [URL 1]
+    2. [URL 2]
+    3. [URL 3]
+    ```
 
 ---
 

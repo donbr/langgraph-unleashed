@@ -1,8 +1,8 @@
 # Ollama Deep Research
 
-- **Generated on:** May 27, 2025 at 19:17:57 PST$
+- **Generated on:** May 27, 2025 at 19:17:57 PST
 - **Source Directory:** [`https://github.com/langchain-ai/local-deep-researcher/tree/main/src/ollama_deep_researcher`](https://github.com/langchain-ai/local-deep-researcher/tree/main/src/ollama_deep_researcher)
-- **Total Files:** 6 Python files$
+- **Total Files:** 6 Python files
 
 ---
 
@@ -263,8 +263,18 @@ graph = builder.compile()
 - **Purpose:** JSON-mode structured output prompts for query generation and reflection workflows
 
 ```python
+from datetime import datetime
+
+# Get current date in a readable format
+def get_current_date():
+    return datetime.now().strftime("%B %d, %Y")
+
 query_writer_instructions="""Your goal is to generate a targeted web search query.
-The query will gather information related to a specific topic.
+
+<CONTEXT>
+Current date: {current_date}
+Please ensure your queries account for the most current information available as of this date.
+</CONTEXT>
 
 <TOPIC>
 {research_topic}
@@ -273,7 +283,6 @@ The query will gather information related to a specific topic.
 <FORMAT>
 Format your response as a JSON object with ALL three of these exact keys:
    - "query": The actual search query string
-   - "aspect": The specific aspect of the topic being researched
    - "rationale": Brief explanation of why this query is relevant
 </FORMAT>
 
@@ -281,7 +290,6 @@ Format your response as a JSON object with ALL three of these exact keys:
 Example output:
 {{
     "query": "machine learning transformer architecture explained",
-    "aspect": "technical architecture",
     "rationale": "Understanding the fundamental structure of transformer models"
 }}
 </EXAMPLE>
@@ -290,7 +298,7 @@ Provide your response in JSON format:"""
 
 summarizer_instructions="""
 <GOAL>
-Generate a high-quality summary of the web search results and keep it concise / related to the user topic.
+Generate a high-quality summary of the provided context.
 </GOAL>
 
 <REQUIREMENTS>
@@ -298,20 +306,25 @@ When creating a NEW summary:
 1. Highlight the most relevant information related to the user topic from the search results
 2. Ensure a coherent flow of information
 
-When EXTENDING an existing summary:                                                                                                               $
-1. Read the existing summary and new search results carefully.                                                  $
-2. Compare the new information with the existing summary.                                                       $
-3. For each piece of new information:                                                                           $
-    a. If it's related to existing points, integrate it into the relevant paragraph.                             $
-    b. If it's entirely new but relevant, add a new paragraph with a smooth transition.                          $
-    c. If it's not relevant to the user topic, skip it.                                                          $
-4. Ensure all additions are relevant to the user's topic.                                                       $
-5. Verify that your final output differs from the input summary.                                                                                                                                                          $
+When EXTENDING an existing summary:                                                                                                                 
+1. Read the existing summary and new search results carefully.                                                    
+2. Compare the new information with the existing summary.                                                         
+3. For each piece of new information:                                                                             
+    a. If it's related to existing points, integrate it into the relevant paragraph.                               
+    b. If it's entirely new but relevant, add a new paragraph with a smooth transition.                            
+    c. If it's not relevant to the user topic, skip it.                                                            
+4. Ensure all additions are relevant to the user's topic.                                                         
+5. Verify that your final output differs from the input summary.                                                                                                                                                            
 < /REQUIREMENTS >
 
 < FORMATTING >
-- Start directly with the updated summary, without preamble or titles. Do not use XML tags in the output.$
-< /FORMATTING >"""
+- Start directly with the updated summary, without preamble or titles. Do not use XML tags in the output.  
+< /FORMATTING >
+
+<Task>
+Think carefully about the provided Context first. Then generate a summary of the context to address the User Input.
+</Task>
+"""
 
 reflection_instructions = """You are an expert research assistant analyzing a summary about {research_topic}.
 
@@ -331,13 +344,13 @@ Format your response as a JSON object with these exact keys:
 - follow_up_query: Write a specific question to address this gap
 </FORMAT>
 
-<EXAMPLE>
-Example output:
+<Task>
+Reflect carefully on the Summary to identify knowledge gaps and produce a follow-up query. Then, produce your output following this JSON format:
 {{
     "knowledge_gap": "The summary lacks information about performance metrics and benchmarks",
     "follow_up_query": "What are typical performance benchmarks and metrics used to evaluate [specific technology]?"
 }}
-</EXAMPLE>
+</Task>
 
 Provide your analysis in JSON format:"""
 ```
@@ -359,7 +372,7 @@ from typing_extensions import TypedDict, Annotated
 
 @dataclass(kw_only=True)
 class SummaryState:
-    research_topic: str = field(default=None) # Report topic   $
+    research_topic: str = field(default=None) # Report topic   
     search_query: str = field(default=None) # Search query
     web_research_results: Annotated[list, operator.add] = field(default_factory=list) 
     sources_gathered: Annotated[list, operator.add] = field(default_factory=list) 
@@ -368,7 +381,7 @@ class SummaryState:
 
 @dataclass(kw_only=True)
 class SummaryStateInput:
-    research_topic: str = field(default=None) # Report topic   $
+    research_topic: str = field(default=None) # Report topic   
 
 @dataclass(kw_only=True)
 class SummaryStateOutput:
@@ -398,12 +411,12 @@ def deduplicate_and_format_sources(search_response, max_tokens_per_source, inclu
     Takes either a single search response or list of responses from search APIs and formats them.
     Limits the raw_content to approximately max_tokens_per_source.
     include_raw_content specifies whether to include the raw_content from Tavily in the formatted string.
-  $
+  
     Args:
         search_response: Either:
             - A dict with a 'results' key containing a list of search results
             - A list of dicts, each containing search results
-          $
+          
     Returns:
         str: Formatted string with deduplicated sources
     """
@@ -419,13 +432,13 @@ def deduplicate_and_format_sources(search_response, max_tokens_per_source, inclu
                 sources_list.extend(response)
     else:
         raise ValueError("Input must be either a dict with 'results' or a list of search results")
-  $
+  
     # Deduplicate by URL
     unique_sources = {}
     for source in sources_list:
         if source['url'] not in unique_sources:
             unique_sources[source['url']] = source
-  $
+  
     # Format output
     formatted_text = "Sources:\n\n"
     for i, source in enumerate(unique_sources.values(), 1):
@@ -443,15 +456,15 @@ def deduplicate_and_format_sources(search_response, max_tokens_per_source, inclu
             if len(raw_content) > char_limit:
                 raw_content = raw_content[:char_limit] + "... [truncated]"
             formatted_text += f"Full source content limited to {max_tokens_per_source} tokens: {raw_content}\n\n"
-              $
+              
     return formatted_text.strip()
 
 def format_sources(search_results):
     """Format search results into a bullet-point list of sources.
-  $
+  
     Args:
         search_results (dict): Tavily search response containing results
-      $
+      
     Returns:
         str: Formatted string with sources and their URLs
     """
@@ -463,11 +476,11 @@ def format_sources(search_results):
 @traceable
 def duckduckgo_search(query: str, max_results: int = 3, fetch_full_page: bool = False) -> Dict[str, List[Dict[str, str]]]:
     """Search the web using DuckDuckGo.
-  $
+  
     Args:
         query (str): The search query to execute
         max_results (int): Maximum number of results to return
-      $
+      
     Returns:
         dict: Search response containing:
             - results (list): List of search result dictionaries, each containing:
@@ -480,12 +493,12 @@ def duckduckgo_search(query: str, max_results: int = 3, fetch_full_page: bool = 
         with DDGS() as ddgs:
             results = []
             search_results = list(ddgs.text(query, max_results=max_results))
-          $
+          
             for r in search_results:
                 url = r.get('href')
                 title = r.get('title')
                 content = r.get('body')
-              $
+              
                 if not all([url, title, content]):
                     print(f"Warning: Incomplete result from DuckDuckGo: {r}")
                     continue
@@ -501,10 +514,10 @@ def duckduckgo_search(query: str, max_results: int = 3, fetch_full_page: bool = 
                         html = response.read()
                         soup = BeautifulSoup(html, 'html.parser')
                         raw_content = soup.get_text()
-                      $
+                      
                     except Exception as e:
                         print(f"Warning: Failed to fetch full page content for {url}: {str(e)}")
-              $
+              
                 # Add result to list
                 result = {
                     "title": title,
@@ -513,7 +526,7 @@ def duckduckgo_search(query: str, max_results: int = 3, fetch_full_page: bool = 
                     "raw_content": raw_content
                 }
                 results.append(result)
-          $
+          
             return {"results": results}
     except Exception as e:
         print(f"Error in DuckDuckGo search: {str(e)}")
@@ -523,12 +536,12 @@ def duckduckgo_search(query: str, max_results: int = 3, fetch_full_page: bool = 
 @traceable
 def tavily_search(query, include_raw_content=True, max_results=3):
     """ Search the web using the Tavily API.
-  $
+  
     Args:
         query (str): The search query to execute
         include_raw_content (bool): Whether to include the raw_content from Tavily in the formatted string
         max_results (int): Maximum number of results to return
-      $
+      
     Returns:
         dict: Search response containing:
             - results (list): List of search result dictionaries, each containing:
@@ -536,7 +549,7 @@ def tavily_search(query, include_raw_content=True, max_results=3):
                 - url (str): URL of the search result
                 - content (str): Snippet/summary of the content
                 - raw_content (str): Full content of the page if available"""
-   $
+   
     api_key = os.getenv("TAVILY_API_KEY")
     if not api_key:
         raise ValueError("TAVILY_API_KEY environment variable is not set")
@@ -548,11 +561,11 @@ def tavily_search(query, include_raw_content=True, max_results=3):
 @traceable
 def perplexity_search(query: str, perplexity_search_loop_count: int) -> Dict[str, Any]:
     """Search the web using the Perplexity API.
-  $
+  
     Args:
         query (str): The search query to execute
         perplexity_search_loop_count (int): The loop step for perplexity search (starts at 0)
-$
+
     Returns:
         dict: Search response containing:
             - results (list): List of search result dictionaries, each containing:
@@ -567,7 +580,7 @@ $
         "content-type": "application/json",
         "Authorization": f"Bearer {os.getenv('PERPLEXITY_API_KEY')}"
     }
-  $
+  
     payload = {
         "model": "sonar-pro",
         "messages": [
@@ -581,21 +594,21 @@ $
             }
         ]
     }
-  $
+  
     response = requests.post(
         "https://api.perplexity.ai/chat/completions",
         headers=headers,
         json=payload
     )
     response.raise_for_status()  # Raise exception for bad status codes
-  $
+  
     # Parse the response
     data = response.json()
     content = data["choices"][0]["message"]["content"]
 
     # Perplexity returns a list of citations for a single search result
     citations = data.get("citations", ["https://perplexity.ai"])
-  $
+  
     # Return first citation with full content, others just as references
     results = [{
         "title": f"Perplexity Search {perplexity_search_loop_count + 1}, Source 1",
@@ -603,7 +616,7 @@ $
         "content": content,
         "raw_content": content
     }]
-  $
+  
     # Add additional citations without duplicating content
     for i, citation in enumerate(citations[1:], start=2):
         results.append({
@@ -612,7 +625,7 @@ $
             "content": "See above for full content",
             "raw_content": None
         })
-  $
+  
     return {"results": results}
 ```
 

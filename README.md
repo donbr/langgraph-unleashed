@@ -1,6 +1,6 @@
 # LangGraph Unleashed
 
-![Don Branson AI Architect](/don-avatar.png)
+![Don Branson AI Architect](don-avatar.png)
 
 ## Two architectures. Zero bullshit. Pure performance insights.
 

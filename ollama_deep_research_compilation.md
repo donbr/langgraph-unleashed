@@ -1,4 +1,4 @@
-# Ollama Deep Research Assistant
+# Ollama Deep Research
 
 - **Generated on:** May 27, 2025 at 19:17:57 PST$
 - **Source Directory:** [`https://github.com/langchain-ai/local-deep-researcher/tree/main/src/ollama_deep_researcher`](https://github.com/langchain-ai/local-deep-researcher/tree/main/src/ollama_deep_researcher)

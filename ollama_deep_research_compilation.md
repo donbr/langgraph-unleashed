@@ -9,11 +9,11 @@
 ## File Index
 
 1. [`__init__.py`](#__init__py) - Package initialization (0 bytes, 0 lines)
-2. [`configuration.py`](#configurationpy) - Configuration management (1,419 bytes, 37 lines)
-3. [`graph.py`](#graphpy) - Main graph workflow (7,196 bytes, 160 lines)
-4. [`prompts.py`](#promptspy) - Prompt templates (3,413 bytes, 77 lines)
-5. [`state.py`](#statepy) - State management (811 bytes, 20 lines)
-6. [`utils.py`](#utilspy) - Utility functions (8,821 bytes, 228 lines)
+2. [`configuration.py`](#configurationpy) - LangGraph runtime configuration with dataclass schema and local Ollama model settings (1,419 bytes, 37 lines)
+3. [`graph.py`](#graphpy) - LangGraph StateGraph with conditional routing, iterative loops, and state persistence (7,196 bytes, 160 lines)
+4. [`prompts.py`](#promptspy) - JSON-mode structured output prompts for query generation and reflection workflows (3,413 bytes, 77 lines)
+5. [`state.py`](#statepy) - Dataclass state schema with operator.add reducers for LangGraph workflow state management (811 bytes, 20 lines)
+6. [`utils.py`](#utilspy) - Async search API implementations with content deduplication and source formatting (8,821 bytes, 228 lines)
 
 ---
 
@@ -23,9 +23,6 @@
 - **Path:** `__init__.py`
 - **Size:** 0 bytes
 - **Lines:** 0
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 27, 2025 17:39
 - **Purpose:** Package initialization file (empty)
 
 ```python
@@ -40,10 +37,7 @@
 - **Path:** `configuration.py`
 - **Size:** 1,419 bytes
 - **Lines:** 37
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 27, 2025 17:39
-- **Purpose:** Configuration management with environment variable support
+- **Purpose:** LangGraph runtime configuration with dataclass schema and local Ollama model settings
 
 ```python
 import os
@@ -93,10 +87,7 @@ class Configuration:
 - **Path:** `graph.py`
 - **Size:** 7,196 bytes
 - **Lines:** 160
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 27, 2025 17:39
-- **Purpose:** Main workflow graph using LangGraph for research assistant
+- **Purpose:** LangGraph StateGraph with conditional routing, iterative loops, and state persistence
 
 ```python
 import json
@@ -269,10 +260,7 @@ graph = builder.compile()
 - **Path:** `prompts.py`
 - **Size:** 3,413 bytes
 - **Lines:** 77
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 27, 2025 17:39
-- **Purpose:** Prompt templates for query generation, summarization, and reflection
+- **Purpose:** JSON-mode structured output prompts for query generation and reflection workflows
 
 ```python
 query_writer_instructions="""Your goal is to generate a targeted web search query.
@@ -362,10 +350,7 @@ Provide your analysis in JSON format:"""
 - **Path:** `state.py`
 - **Size:** 811 bytes
 - **Lines:** 20
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 27, 2025 17:39
-- **Purpose:** State management classes for the research workflow
+- **Purpose:** Dataclass state schema with operator.add reducers for LangGraph workflow state management
 
 ```python
 import operator
@@ -398,10 +383,7 @@ class SummaryStateOutput:
 - **Path:** `utils.py`
 - **Size:** 8,821 bytes
 - **Lines:** 228
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 27, 2025 17:39
-- **Purpose:** Utility functions for web search APIs (Tavily, Perplexity, DuckDuckGo)
+- **Purpose:** Async search API implementations with content deduplication and source formatting
 
 ```python
 import os

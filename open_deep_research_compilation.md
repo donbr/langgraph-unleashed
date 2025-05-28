@@ -9,12 +9,12 @@
 ## File Index
 
 1. [`__init__.py`](#initpy) - Package initialization with imports/exports (72 bytes, 2 lines)
-2. [`configuration.py`](#configurationpy) - Configuration management (3183 bytes, 74 lines)
-3. [`graph.py`](#graphpy) - Graph operations and workflow (20842 bytes, 492 lines)
-4. [`multi_agent.py`](#multi_agentpy) - Function definitions and implementations (13253 bytes, 330 lines)
-5. [`prompts.py`](#promptspy) - Prompt templates and instructions (14332 bytes, 395 lines)
-6. [`state.py`](#statepy) - State management (2449 bytes, 64 lines)
-7. [`utils.py`](#utilspy) - Utility functions and helpers (63345 bytes, 1470 lines)
+2. [`configuration.py`](#configurationpy) - Runtime configuration schema for LangGraph StateGraph with multi-provider LLM support (3183 bytes, 74 lines)
+3. [`graph.py`](#graphpy) - LangGraph StateGraph with Send API parallel execution, human-in-the-loop interrupts, and conditional routing (20842 bytes, 492 lines)
+4. [`multi_agent.py`](#multi_agentpy) - LangGraph multi-agent supervisor architecture with tool-calling agents and Command-based handoffs (13253 bytes, 330 lines)
+5. [`prompts.py`](#promptspy) - Structured output prompts for LLM planning, writing, and multi-agent coordination (14332 bytes, 395 lines)
+6. [`state.py`](#statepy) - Pydantic state schemas and TypedDict definitions for LangGraph workflow persistence (2449 bytes, 64 lines)
+7. [`utils.py`](#utilspy) - Multi-provider search API integrations with async execution and content deduplication (63345 bytes, 1470 lines)
 
 ---
 
@@ -24,9 +24,6 @@
 - **Path:** `__init__.py`
 - **Size:** 72 bytes
 - **Lines:** 2
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 15, 2025 12:29
 - **Purpose:** Package initialization with imports/exports
 
 ```python
@@ -43,10 +40,7 @@ __version__ = "0.0.15"
 - **Path:** `configuration.py`
 - **Size:** 3183 bytes
 - **Lines:** 74
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 25, 2025 00:42
-- **Purpose:** Configuration management
+- **Purpose:** Runtime configuration schema for LangGraph StateGraph with multi-provider LLM support
 
 ```python
 import os
@@ -133,10 +127,7 @@ class Configuration:
 - **Path:** `graph.py`
 - **Size:** 20842 bytes
 - **Lines:** 492
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 25, 2025 00:24
-- **Purpose:** Graph operations and workflow
+- **Purpose:** LangGraph StateGraph with Send API parallel execution, human-in-the-loop interrupts, and conditional routing
 
 ```python
 from typing import Literal
@@ -641,10 +632,7 @@ graph = builder.compile()
 - **Path:** `multi_agent.py`
 - **Size:** 13253 bytes
 - **Lines:** 330
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 15, 2025 12:29
-- **Purpose:** Function definitions and implementations
+- **Purpose:** LangGraph multi-agent supervisor architecture with tool-calling agents and Command-based handoffs
 
 ```python
 from typing import List, Annotated, TypedDict, operator, Literal
@@ -988,10 +976,7 @@ graph = supervisor_builder.compile()
 - **Path:** `prompts.py`
 - **Size:** 14332 bytes
 - **Lines:** 395
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 15, 2025 12:29
-- **Purpose:** Prompt templates and instructions
+- **Purpose:** Structured output prompts for LLM planning, writing, and multi-agent coordination
 
 ```python
 report_planner_query_writer_instructions="""You are performing research for a report. 
@@ -1399,10 +1384,7 @@ Before each search query or when writing the section, think through:
 - **Path:** `state.py`
 - **Size:** 2449 bytes
 - **Lines:** 64
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 24, 2025 23:33
-- **Purpose:** State management
+- **Purpose:** Pydantic state schemas and TypedDict definitions for LangGraph workflow persistence
 
 ```python
 from typing import Annotated, List, TypedDict, Literal
@@ -1479,10 +1461,7 @@ class SectionOutputState(TypedDict):
 - **Path:** `utils.py`
 - **Size:** 63345 bytes
 - **Lines:** 1470
-- **Permissions:** `-rw-r--r--`
-- **Owner:** donbr:donbr
-- **Last Modified:** May 24, 2025 23:33
-- **Purpose:** Utility functions and helpers
+- **Purpose:** Multi-provider search API integrations with async execution and content deduplication
 
 ```python
 import os

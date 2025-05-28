@@ -1,8 +1,8 @@
 # Python Files Compilation - Open Deep Research
 
-**Generated on:** May 27, 2025 at 19:31:46 PDT  
-**Source Directory:** `/home/donbr/langgraph/open_deep_research/src/open_deep_research`  
-**Total Files:** 7 Python files  
+- **Generated on:** May 27, 2025 at 19:31:46 PDT$
+- **Source Directory:** [`https://github.com/langchain-ai/open_deep_research/tree/main/src/open_deep_research`](https://github.com/langchain-ai/open_deep_research/tree/main/src/open_deep_research)
+- **Total Files:** 7 Python files$
 
 ---
 
@@ -65,7 +65,7 @@ DEFAULT_REPORT_STRUCTURE = """Use this structure to create a report on the user-
 
 2. Main Body Sections:
    - Each section should focus on a sub-topic of the user-provided topic
-   
+ $
 3. Conclusion
    - Aim for 1 structural element (either a list of table) that distills the main body sections 
    - Provide a concise summary of the report"""
@@ -87,7 +87,7 @@ class Configuration:
     report_structure: str = DEFAULT_REPORT_STRUCTURE # Defaults to the default report structure
     search_api: SearchAPI = SearchAPI.TAVILY # Default to TAVILY
     search_api_config: Optional[Dict[str, Any]] = None
-    
+  $
     # Graph-specific configuration
     number_of_queries: int = 2 # Number of search queries to generate per iteration
     max_search_depth: int = 2 # Maximum number of reflection + search iterations
@@ -104,7 +104,7 @@ class Configuration:
     writer_model_kwargs: Optional[Dict[str, Any]] = None # kwargs for writer_model
     search_api: SearchAPI = SearchAPI.TAVILY # Default to TAVILY
     search_api_config: Optional[Dict[str, Any]] = None 
-    
+  $
     # Multi-agent specific configuration
     supervisor_model: str = "openai:gpt-4.1" # Model for supervisor agent in multi-agent setup
     researcher_model: str = "openai:gpt-4.1" # Model for research agents in multi-agent setup 
@@ -182,17 +182,17 @@ from open_deep_research.utils import (
 
 async def generate_report_plan(state: ReportState, config: RunnableConfig):
     """Generate the initial report plan with sections.
-    
+  $
     This node:
     1. Gets configuration for the report structure and search parameters
     2. Generates search queries to gather context for planning
     3. Performs web searches using those queries
     4. Uses an LLM to generate a structured plan with sections
-    
+  $
     Args:
         state: Current graph state containing the report topic
         config: Configuration for models, search APIs, etc.
-        
+      $
     Returns:
         Dict containing the generated sections
     """
@@ -228,7 +228,7 @@ async def generate_report_plan(state: ReportState, config: RunnableConfig):
     # Format system instructions
     system_instructions_query = report_planner_query_writer_instructions.format(topic=topic, report_organization=report_structure, number_of_queries=number_of_queries)
 
-    # Generate queries  
+    # Generate queries$
     results = await structured_llm.ainvoke([SystemMessage(content=system_instructions_query),
                                      HumanMessage(content="Generate search queries that will help with planning the sections of the report.")])
 
@@ -264,7 +264,7 @@ async def generate_report_plan(state: ReportState, config: RunnableConfig):
         planner_llm = init_chat_model(model=planner_model, 
                                       model_provider=planner_provider,
                                       model_kwargs=planner_model_kwargs)
-    
+  $
     # Generate the report sections
     structured_llm = planner_llm.with_structured_output(Sections)
     report_sections = await structured_llm.ainvoke([SystemMessage(content=system_instructions_sections),
@@ -277,18 +277,18 @@ async def generate_report_plan(state: ReportState, config: RunnableConfig):
 
 def human_feedback(state: ReportState, config: RunnableConfig) -> Command[Literal["generate_report_plan","build_section_with_web_research"]]:
     """Get human feedback on the report plan and route to next steps.
-    
+  $
     This node:
     1. Formats the current report plan for human review
     2. Gets feedback via an interrupt
     3. Routes to either:
        - Section writing if plan is approved
        - Plan regeneration if feedback is provided
-    
+  $
     Args:
         state: Current graph state with sections to review
         config: Configuration for the workflow
-        
+      $
     Returns:
         Command to either regenerate plan or start section writing
     """
@@ -307,7 +307,7 @@ def human_feedback(state: ReportState, config: RunnableConfig) -> Command[Litera
     interrupt_message = f"""Please provide feedback on the following report plan. 
                         \n\n{sections_str}\n
                         \nDoes the report plan meet your needs?\nPass 'true' to approve the report plan.\nOr, provide feedback to regenerate the report plan:"""
-    
+  $
     feedback = interrupt(interrupt_message)
 
     # If the user approves the report plan, kick off section writing
@@ -318,7 +318,7 @@ def human_feedback(state: ReportState, config: RunnableConfig) -> Command[Litera
             for s in sections 
             if s.research
         ])
-    
+  $
     # If the user provides feedback, regenerate the report plan 
     elif isinstance(feedback, str):
         # Treat this as feedback and append it to the existing list
@@ -326,17 +326,17 @@ def human_feedback(state: ReportState, config: RunnableConfig) -> Command[Litera
                        update={"feedback_on_report_plan": [feedback]})
     else:
         raise TypeError(f"Interrupt value of type {type(feedback)} is not supported.")
-    
+  $
 async def generate_queries(state: SectionState, config: RunnableConfig):
     """Generate search queries for researching a specific section.
-    
+  $
     This node uses an LLM to generate targeted search queries based on the 
     section topic and description.
-    
+  $
     Args:
         state: Current state containing section details
         config: Configuration including number of queries to generate
-        
+      $
     Returns:
         Dict containing the generated search queries
     """
@@ -361,7 +361,7 @@ async def generate_queries(state: SectionState, config: RunnableConfig):
                                                            section_topic=section.description, 
                                                            number_of_queries=number_of_queries)
 
-    # Generate queries  
+    # Generate queries$
     queries = await structured_llm.ainvoke([SystemMessage(content=system_instructions),
                                      HumanMessage(content="Generate search queries on the provided topic.")])
 
@@ -369,16 +369,16 @@ async def generate_queries(state: SectionState, config: RunnableConfig):
 
 async def search_web(state: SectionState, config: RunnableConfig):
     """Execute web searches for the section queries.
-    
+  $
     This node:
     1. Takes the generated queries
     2. Executes searches using configured search API
     3. Formats results into usable context
-    
+  $
     Args:
         state: Current state with search queries
         config: Search API configuration
-        
+      $
     Returns:
         Dict with search results and updated iteration count
     """
@@ -402,18 +402,18 @@ async def search_web(state: SectionState, config: RunnableConfig):
 
 async def write_section(state: SectionState, config: RunnableConfig) -> Command[Literal[END, "search_web"]]:
     """Write a section of the report and evaluate if more research is needed.
-    
+  $
     This node:
     1. Writes section content using search results
     2. Evaluates the quality of the section
     3. Either:
        - Completes the section if quality passes
        - Triggers more research if quality fails
-    
+  $
     Args:
         state: Current state with search results and section info
         config: Configuration for writing and evaluation
-        
+      $
     Returns:
         Command to either complete section or do more research
     """
@@ -433,7 +433,7 @@ async def write_section(state: SectionState, config: RunnableConfig) -> Command[
                                                              context=source_str, 
                                                              section_content=section.content)
 
-    # Generate section  
+    # Generate section$
     writer_provider = get_config_value(configurable.writer_provider)
     writer_model_name = get_config_value(configurable.writer_model)
     writer_model_kwargs = get_config_value(configurable.writer_model_kwargs or {})
@@ -441,15 +441,15 @@ async def write_section(state: SectionState, config: RunnableConfig) -> Command[
 
     section_content = await writer_model.ainvoke([SystemMessage(content=section_writer_instructions),
                                            HumanMessage(content=section_writer_inputs_formatted)])
-    
-    # Write content to the section object  
+  $
+    # Write content to the section object$
     section.content = section_content.content
 
     # Grade prompt 
     section_grader_message = ("Grade the report and consider follow-up questions for missing information. "
                               "If the grade is 'pass', return empty strings for all follow-up queries. "
                               "If the grade is 'fail', provide specific search queries to gather missing information.")
-    
+  $
     section_grader_instructions_formatted = section_grader_instructions.format(topic=topic, 
                                                                                section_topic=section.description,
                                                                                section=section.content, 
@@ -488,17 +488,17 @@ async def write_section(state: SectionState, config: RunnableConfig) -> Command[
         update={"search_queries": feedback.follow_up_queries, "section": section},
         goto="search_web"
         )
-    
+  $
 async def write_final_sections(state: SectionState, config: RunnableConfig):
     """Write sections that don't require research using completed sections as context.
-    
+  $
     This node handles sections like conclusions or summaries that build on
     the researched sections rather than requiring direct research.
-    
+  $
     Args:
         state: Current state with completed sections as context
         config: Configuration for the writing model
-        
+      $
     Returns:
         Dict containing the newly written section
     """
@@ -510,19 +510,19 @@ async def write_final_sections(state: SectionState, config: RunnableConfig):
     topic = state["topic"]
     section = state["section"]
     completed_report_sections = state["report_sections_from_research"]
-    
+  $
     # Format system instructions
     system_instructions = final_section_writer_instructions.format(topic=topic, section_name=section.name, section_topic=section.description, context=completed_report_sections)
 
-    # Generate section  
+    # Generate section$
     writer_provider = get_config_value(configurable.writer_provider)
     writer_model_name = get_config_value(configurable.writer_model)
     writer_model_kwargs = get_config_value(configurable.writer_model_kwargs or {})
     writer_model = init_chat_model(model=writer_model_name, model_provider=writer_provider, model_kwargs=writer_model_kwargs) 
-    
+  $
     section_content = await writer_model.ainvoke([SystemMessage(content=system_instructions),
                                            HumanMessage(content="Generate a report section based on the provided sources.")])
-    
+  $
     # Write content to section 
     section.content = section_content.content
 
@@ -531,13 +531,13 @@ async def write_final_sections(state: SectionState, config: RunnableConfig):
 
 def gather_completed_sections(state: ReportState):
     """Format completed sections as context for writing final sections.
-    
+  $
     This node takes all completed research sections and formats them into
     a single context string for writing summary sections.
-    
+  $
     Args:
         state: Current state with completed sections
-        
+      $
     Returns:
         Dict with formatted sections as context
     """
@@ -552,15 +552,15 @@ def gather_completed_sections(state: ReportState):
 
 def compile_final_report(state: ReportState):
     """Compile all sections into the final report.
-    
+  $
     This node:
     1. Gets all completed sections
     2. Orders them according to original plan
     3. Combines them into the final report
-    
+  $
     Args:
         state: Current state with all completed sections
-        
+      $
     Returns:
         Dict containing the complete report
     """
@@ -580,13 +580,13 @@ def compile_final_report(state: ReportState):
 
 def initiate_final_section_writing(state: ReportState):
     """Create parallel tasks for writing non-research sections.
-    
+  $
     This edge function identifies sections that don't need research and
     creates parallel writing tasks for each one.
-    
+  $
     Args:
         state: Current state with all sections and research context
-        
+      $
     Returns:
         List of Send commands for parallel section writing
     """
@@ -729,7 +729,7 @@ class ReportState(MessagesState):
     final_report: str # Final report
 
 class SectionState(MessagesState):
-    section: str # Report section  
+    section: str # Report section$
     completed_sections: list[Section] # Final key we duplicate in outer state for Send() API
 
 class SectionOutputState(TypedDict):
@@ -757,10 +757,10 @@ async def supervisor(state: ReportState, config: RunnableConfig):
     # Get configuration
     configurable = Configuration.from_runnable_config(config)
     supervisor_model = get_config_value(configurable.supervisor_model)
-    
+  $
     # Initialize the model
     llm = init_chat_model(model=supervisor_model)
-    
+  $
     # If sections have been completed, but we don't yet have the final report, then we need to initiate writing the introduction and conclusion
     if state.get("completed_sections") and not state.get("final_report"):
         research_complete_message = {"role": "user", "content": "Research is complete. Now write the introduction and conclusion for the report. Here are the completed main body sections: \n\n" + "\n\n".join([s.content for s in state["completed_sections"]])}
@@ -768,7 +768,7 @@ async def supervisor(state: ReportState, config: RunnableConfig):
 
     # Get tools based on configuration
     supervisor_tool_list, _ = get_supervisor_tools(config)
-    
+  $
     # Invoke
     return {
         "messages": [
@@ -793,7 +793,7 @@ async def supervisor_tools(state: ReportState, config: RunnableConfig)  -> Comma
 
     # Get tools based on configuration
     _, supervisor_tools_by_name = get_supervisor_tools(config)
-    
+  $
     # First process all tool calls to ensure we respond to each one (required for OpenAI)
     for tool_call in state["messages"][-1].tool_calls:
         # Get the tool
@@ -809,7 +809,7 @@ async def supervisor_tools(state: ReportState, config: RunnableConfig)  -> Comma
                        "content": observation, 
                        "name": tool_call["name"], 
                        "tool_call_id": tool_call["id"]})
-        
+      $
         # Store special tool results for processing after all tools have been called
         if tool_call["name"] == "Sections":
             sections_list = observation.sections
@@ -825,7 +825,7 @@ async def supervisor_tools(state: ReportState, config: RunnableConfig)  -> Comma
                 conclusion_content = f"## {observation.name}\n\n{observation.content}"
             else:
                 conclusion_content = observation.content
-    
+  $
     # After processing all tool calls, decide what to do next
     if sections_list:
         # Send the sections to the research agents
@@ -839,10 +839,10 @@ async def supervisor_tools(state: ReportState, config: RunnableConfig)  -> Comma
         # Get all sections and combine in proper order: Introduction, Body Sections, Conclusion
         intro = state.get("final_report", "")
         body_sections = "\n\n".join([s.content for s in state["completed_sections"]])
-        
+      $
         # Assemble final report in correct order
         complete_report = f"{intro}\n\n{body_sections}\n\n{conclusion_content}"
-        
+      $
         # Append to messages to indicate completion
         result.append({"role": "user", "content": "Report is now complete with introduction, body sections, and conclusion."})
         return Command(goto="supervisor", update={"final_report": complete_report, "messages": result})
@@ -859,24 +859,24 @@ async def supervisor_should_continue(state: ReportState) -> Literal["supervisor_
     # If the LLM makes a tool call, then perform an action
     if last_message.tool_calls:
         return "supervisor_tools"
-    
+  $
     # Else end because the supervisor asked a question or is finished
     else:
         return END
 
 async def research_agent(state: SectionState, config: RunnableConfig):
     """LLM decides whether to call a tool or not"""
-    
+  $
     # Get configuration
     configurable = Configuration.from_runnable_config(config)
     researcher_model = get_config_value(configurable.researcher_model)
-    
+  $
     # Initialize the model
     llm = init_chat_model(model=researcher_model)
 
     # Get tools based on configuration
     research_tool_list, _ = get_research_tools(config)
-    
+  $
     return {
         "messages": [
             # Enforce tool calling to either perform more search or call the Section tool to write the section
@@ -896,10 +896,10 @@ async def research_agent_tools(state: SectionState, config: RunnableConfig):
 
     result = []
     completed_section = None
-    
+  $
     # Get tools based on configuration
     _, research_tools_by_name = get_research_tools(config)
-    
+  $
     # Process all tool calls first (required for OpenAI)
     for tool_call in state["messages"][-1].tool_calls:
         # Get the tool
@@ -914,11 +914,11 @@ async def research_agent_tools(state: SectionState, config: RunnableConfig):
                        "content": observation, 
                        "name": tool_call["name"], 
                        "tool_call_id": tool_call["id"]})
-        
+      $
         # Store the section observation if a Section tool was called
         if tool_call["name"] == "Section":
             completed_section = observation
-    
+  $
     # After processing all tools, decide what to do next
     if completed_section:
         # Write the completed section to state and return to the supervisor
@@ -939,7 +939,7 @@ async def research_agent_should_continue(state: SectionState) -> Literal["resear
 
     else:
         return END
-    
+  $
 """Build the multi-agent workflow"""
 
 # Research agent workflow
@@ -1256,21 +1256,21 @@ You are scoping research for a report based on a user-provided topic.
 
 ### Your responsibilities:
 
-1. **Gather Background Information**  
+1. **Gather Background Information**$
    Based upon the user's topic, use the `enhanced_tavily_search` to collect relevant information about the topic. 
    - You MUST perform ONLY ONE search to gather comprehensive context
    - Create a highly targeted search query that will yield the most valuable information
    - Take time to analyze and synthesize the search results before proceeding
    - Do not proceed to the next step until you have an understanding of the topic
 
-2. **Clarify the Topic**  
+2. **Clarify the Topic**$
    After your initial research, engage with the user to clarify any questions that arose.
    - Ask ONE SET of follow-up questions based on what you learned from your searches
    - Do not proceed until you fully understand the topic, goals, constraints, and any preferences
    - Synthesize what you've learned so far before asking questions
    - You MUST engage in at least one clarification exchange with the user before proceeding
 
-3. **Define Report Structure**  
+3. **Define Report Structure**$
    Only after completing both research AND clarification with the user:
    - Use the `Sections` tool to define a list of report sections
    - Each section should be a written description with: a section name and a section research plan
@@ -1279,7 +1279,7 @@ You are scoping research for a report based on a user-provided topic.
    - Base your sections on both the search results AND user clarifications
    - Format your sections as a list of strings, with each string having the scope of research for that section.
 
-4. **Assemble the Final Report**  
+4. **Assemble the Final Report**$
    When all sections are returned:
    - IMPORTANT: First check your previous messages to see what you've already completed
    - If you haven't created an introduction yet, use the `Introduction` tool to generate one
@@ -1307,14 +1307,14 @@ You are a researcher responsible for completing a specific section of a report.
 
 ### Your goals:
 
-1. **Understand the Section Scope**  
+1. **Understand the Section Scope**$
    Begin by reviewing the section scope of work. This defines your research focus. Use it as your objective.
 
 <Section Description>
 {section_description}
 </Section Description>
 
-2. **Strategic Research Process**  
+2. **Strategic Research Process**$
    Follow this precise research strategy:
 
    a) **First Query**: Begin with a SINGLE, well-crafted search query with `enhanced_tavily_search` that directly addresses the core of the section topic.
@@ -1337,7 +1337,7 @@ You are a researcher responsible for completing a specific section of a report.
       - At least 3 high-quality sources with diverse perspectives
       - Both breadth (covering all aspects) and depth (specific details) of information
 
-3. **Use the Section Tool**  
+3. **Use the Section Tool**$
    Only after thorough research, write a high-quality section using the Section tool:
    - `name`: The title of the section
    - `description`: The scope of research you completed (brief, 1-2 sentences)
@@ -1421,7 +1421,7 @@ class Section(BaseModel):
     )
     content: str = Field(
         description="The content of the section."
-    )   
+    ) $
 
 class Sections(BaseModel):
     sections: List[Section] = Field(
@@ -1446,12 +1446,12 @@ class Feedback(BaseModel):
 
 class ReportStateInput(TypedDict):
     topic: str # Report topic
-    
+  $
 class ReportStateOutput(TypedDict):
     final_report: str # Final report
 
 class ReportState(TypedDict):
-    topic: str # Report topic    
+    topic: str # Report topic  $
     feedback_on_report_plan: Annotated[list[str], operator.add] # List of feedback on the report plan
     sections: list[Section] # List of report sections 
     completed_sections: Annotated[list, operator.add] # Send() API key
@@ -1460,7 +1460,7 @@ class ReportState(TypedDict):
 
 class SectionState(TypedDict):
     topic: str # Report topic
-    section: Section # Report section  
+    section: Section # Report section$
     search_iterations: int # Number of search iterations done
     search_queries: list[SearchQuery] # List of search queries
     source_str: str # String of formatted source content from web search
@@ -1514,7 +1514,7 @@ from langchain_core.tools import tool
 from langsmith import traceable
 
 from open_deep_research.state import Section
-    
+  $
 def get_config_value(value):
     """
     Helper function to handle string, dict, and enum cases of configuration values
@@ -1574,7 +1574,7 @@ def deduplicate_and_format_sources(search_response, max_tokens_per_source=5000, 
                 - raw_content: str|None
         max_tokens_per_source: int
         include_raw_content: bool
-            
+          $
     Returns:
         str: Formatted string with deduplicated sources
     """
@@ -1582,7 +1582,7 @@ def deduplicate_and_format_sources(search_response, max_tokens_per_source=5000, 
     sources_list = []
     for response in search_response:
         sources_list.extend(response['results'])
-    
+  $
     # Deduplicate by URL
     unique_sources = {source['url']: source for source in sources_list}
 
@@ -1606,7 +1606,7 @@ def deduplicate_and_format_sources(search_response, max_tokens_per_source=5000, 
                 raw_content = raw_content[:char_limit] + "... [truncated]"
             formatted_text += f"Full source content limited to {max_tokens_per_source} tokens: {raw_content}\n\n"
         formatted_text += f"{'='*80}\n\n" # End section separator
-                
+              $
     return formatted_text.strip()
 
 def format_sections(sections: list[Section]) -> str:
@@ -1643,7 +1643,7 @@ async def tavily_search_async(search_queries, max_results: int = 5, topic: Liter
             List[dict]: List of search responses from Tavily API:
                 {
                     'query': str,
-                    'follow_up_questions': None,      
+                    'follow_up_questions': None,    $
                     'answer': None,
                     'images': list,
                     'results': [                     # List of search results
@@ -1737,15 +1737,15 @@ async def azureaisearch_search_async(search_queries: list[str], max_results: int
 @traceable
 def perplexity_search(search_queries):
     """Search the web using the Perplexity API.
-    
+  $
     Args:
         search_queries (List[SearchQuery]): List of search queries to process
-  
+$
     Returns:
         List[dict]: List of search responses from Perplexity API, one per query. Each response has format:
             {
                 'query': str,                    # The original search query
-                'follow_up_questions': None,      
+                'follow_up_questions': None,    $
                 'answer': None,
                 'images': list,
                 'results': [                     # List of search results
@@ -1766,7 +1766,7 @@ def perplexity_search(search_queries):
         "content-type": "application/json",
         "Authorization": f"Bearer {os.getenv('PERPLEXITY_API_KEY')}"
     }
-    
+  $
     search_docs = []
     for query in search_queries:
 
@@ -1783,22 +1783,22 @@ def perplexity_search(search_queries):
                 }
             ]
         }
-        
+      $
         response = requests.post(
             "https://api.perplexity.ai/chat/completions",
             headers=headers,
             json=payload
         )
         response.raise_for_status()  # Raise exception for bad status codes
-        
+      $
         # Parse the response
         data = response.json()
         content = data["choices"][0]["message"]["content"]
         citations = data.get("citations", ["https://perplexity.ai"])
-        
+      $
         # Create results list for this query
         results = []
-        
+      $
         # First citation gets the full content
         results.append({
             "title": f"Perplexity Search, Source 1",
@@ -1807,7 +1807,7 @@ def perplexity_search(search_queries):
             "raw_content": content,
             "score": 1.0  # Adding score to match Tavily format
         })
-        
+      $
         # Add additional citations without duplicating content
         for i, citation in enumerate(citations[1:], start=2):
             results.append({
@@ -1817,7 +1817,7 @@ def perplexity_search(search_queries):
                 "raw_content": None,
                 "score": 0.5  # Lower score for secondary sources
             })
-        
+      $
         # Format response to match Tavily structure
         search_docs.append({
             "query": query,
@@ -1826,7 +1826,7 @@ def perplexity_search(search_queries):
             "images": [],
             "results": results
         })
-    
+  $
     return search_docs
 
 @traceable
@@ -1835,7 +1835,7 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
                      exclude_domains: Optional[List[str]] = None,
                      subpages: Optional[int] = None):
     """Search the web using the Exa API.
-    
+  $
     Args:
         search_queries (List[SearchQuery]): List of search queries to process
         max_characters (int, optional): Maximum number of characters to retrieve for each result's raw content.
@@ -1846,12 +1846,12 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
         exclude_domains (List[str], optional): List of domains to exclude from search results.
             Cannot be used together with include_domains.
         subpages (int, optional): Number of subpages to retrieve per result. If None, subpages are not retrieved.
-        
+      $
     Returns:
         List[dict]: List of search responses from Exa API, one per query. Each response has format:
             {
                 'query': str,                    # The original search query
-                'follow_up_questions': None,      
+                'follow_up_questions': None,    $
                 'answer': None,
                 'images': list,
                 'results': [                     # List of search results
@@ -1869,15 +1869,15 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
     # Check that include_domains and exclude_domains are not both specified
     if include_domains and exclude_domains:
         raise ValueError("Cannot specify both include_domains and exclude_domains")
-    
+  $
     # Initialize Exa client (API key should be configured in your .env file)
     exa = Exa(api_key = f"{os.getenv('EXA_API_KEY')}")
-    
+  $
     # Define the function to process a single query
     async def process_query(query):
         # Use run_in_executor to make the synchronous exa call in a non-blocking way
         loop = asyncio.get_event_loop()
-        
+      $
         # Define the function for the executor with all parameters
         def exa_search_fn():
             # Build parameters dictionary
@@ -1887,59 +1887,59 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
                 "summary": True,  # This is an amazing feature by EXA. It provides an AI generated summary of the content based on the query
                 "num_results": num_results
             }
-            
+          $
             # Add optional parameters only if they are provided
             if subpages is not None:
                 kwargs["subpages"] = subpages
-                
+              $
             if include_domains:
                 kwargs["include_domains"] = include_domains
             elif exclude_domains:
                 kwargs["exclude_domains"] = exclude_domains
-                
+              $
             return exa.search_and_contents(query, **kwargs)
-        
+      $
         response = await loop.run_in_executor(None, exa_search_fn)
-        
+      $
         # Format the response to match the expected output structure
         formatted_results = []
         seen_urls = set()  # Track URLs to avoid duplicates
-        
+      $
         # Helper function to safely get value regardless of if item is dict or object
         def get_value(item, key, default=None):
             if isinstance(item, dict):
                 return item.get(key, default)
             else:
                 return getattr(item, key, default) if hasattr(item, key) else default
-        
+      $
         # Access the results from the SearchResponse object
         results_list = get_value(response, 'results', [])
-        
+      $
         # First process all main results
         for result in results_list:
             # Get the score with a default of 0.0 if it's None or not present
             score = get_value(result, 'score', 0.0)
-            
+          $
             # Combine summary and text for content if both are available
             text_content = get_value(result, 'text', '')
             summary_content = get_value(result, 'summary', '')
-            
+          $
             content = text_content
             if summary_content:
                 if content:
                     content = f"{summary_content}\n\n{content}"
                 else:
                     content = summary_content
-            
+          $
             title = get_value(result, 'title', '')
             url = get_value(result, 'url', '')
-            
+          $
             # Skip if we've seen this URL before (removes duplicate entries)
             if url in seen_urls:
                 continue
-                
+              $
             seen_urls.add(url)
-            
+          $
             # Main result entry
             result_entry = {
                 "title": title,
@@ -1948,10 +1948,10 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
                 "score": score,
                 "raw_content": text_content
             }
-            
+          $
             # Add the main result to the formatted results
             formatted_results.append(result_entry)
-        
+      $
         # Now process subpages only if the subpages parameter was provided
         if subpages is not None:
             for result in results_list:
@@ -1959,26 +1959,26 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
                 for subpage in subpages_list:
                     # Get subpage score
                     subpage_score = get_value(subpage, 'score', 0.0)
-                    
+                  $
                     # Combine summary and text for subpage content
                     subpage_text = get_value(subpage, 'text', '')
                     subpage_summary = get_value(subpage, 'summary', '')
-                    
+                  $
                     subpage_content = subpage_text
                     if subpage_summary:
                         if subpage_content:
                             subpage_content = f"{subpage_summary}\n\n{subpage_content}"
                         else:
                             subpage_content = subpage_summary
-                    
+                  $
                     subpage_url = get_value(subpage, 'url', '')
-                    
+                  $
                     # Skip if we've seen this URL before
                     if subpage_url in seen_urls:
                         continue
-                        
+                      $
                     seen_urls.add(subpage_url)
-                    
+                  $
                     formatted_results.append({
                         "title": get_value(subpage, 'title', ''),
                         "url": subpage_url,
@@ -1986,14 +1986,14 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
                         "score": subpage_score,
                         "raw_content": subpage_text
                     })
-        
+      $
         # Collect images if available (only from main results to avoid duplication)
         images = []
         for result in results_list:
             image = get_value(result, 'image')
             if image and image not in images:  # Avoid duplicate images
                 images.append(image)
-                
+              $
         return {
             "query": query,
             "follow_up_questions": None,
@@ -2001,7 +2001,7 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
             "images": images,
             "results": formatted_results
         }
-    
+  $
     # Process all queries sequentially with delay to respect rate limit
     search_docs = []
     for i, query in enumerate(search_queries):
@@ -2009,7 +2009,7 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
             # Add delay between requests (0.25s = 4 requests per second, well within the 5/s limit)
             if i > 0:  # Don't delay the first request
                 await asyncio.sleep(0.25)
-            
+          $
             result = await process_query(query)
             search_docs.append(result)
         except Exception as e:
@@ -2024,12 +2024,12 @@ async def exa_search(search_queries, max_characters: Optional[int] = None, num_r
                 "results": [],
                 "error": str(e)
             })
-            
+          $
             # Add additional delay if we hit a rate limit error
             if "429" in str(e):
                 print("Rate limit exceeded. Adding additional delay...")
                 await asyncio.sleep(1.0)  # Add a longer delay if we hit a rate limit
-    
+  $
     return search_docs
 
 @traceable
@@ -2047,7 +2047,7 @@ async def arxiv_search_async(search_queries, load_max_docs=5, get_full_documents
         List[dict]: List of search responses from arXiv, one per query. Each response has format:
             {
                 'query': str,                    # The original search query
-                'follow_up_questions': None,      
+                'follow_up_questions': None,    $
                 'answer': None,
                 'images': [],
                 'results': [                     # List of search results
@@ -2062,7 +2062,7 @@ async def arxiv_search_async(search_queries, load_max_docs=5, get_full_documents
                 ]
             }
     """
-    
+  $
     async def process_single_query(query):
         try:
             # Create retriever for each query
@@ -2071,23 +2071,23 @@ async def arxiv_search_async(search_queries, load_max_docs=5, get_full_documents
                 get_full_documents=get_full_documents,
                 load_all_available_meta=load_all_available_meta
             )
-            
+          $
             # Run the synchronous retriever in a thread pool
             loop = asyncio.get_event_loop()
             docs = await loop.run_in_executor(None, lambda: retriever.invoke(query))
-            
+          $
             results = []
             # Assign decreasing scores based on the order
             base_score = 1.0
             score_decrement = 1.0 / (len(docs) + 1) if docs else 0
-            
+          $
             for i, doc in enumerate(docs):
                 # Extract metadata
                 metadata = doc.metadata
-                
+              $
                 # Use entry_id as the URL (this is the actual arxiv link)
                 url = metadata.get('entry_id', '')
-                
+              $
                 # Format content with all useful metadata
                 content_parts = []
 
@@ -2131,7 +2131,7 @@ async def arxiv_search_async(search_queries, load_max_docs=5, get_full_documents
 
                 # Join all content parts with newlines 
                 content = "\n".join(content_parts)
-                
+              $
                 result = {
                     'title': metadata.get('Title', ''),
                     'url': url,  # Using entry_id as the URL
@@ -2140,7 +2140,7 @@ async def arxiv_search_async(search_queries, load_max_docs=5, get_full_documents
                     'raw_content': doc.page_content if get_full_documents else None
                 }
                 results.append(result)
-                
+              $
             return {
                 'query': query,
                 'follow_up_questions': None,
@@ -2159,7 +2159,7 @@ async def arxiv_search_async(search_queries, load_max_docs=5, get_full_documents
                 'results': [],
                 'error': str(e)
             }
-    
+  $
     # Process queries sequentially with delay to respect arXiv rate limit (1 request per 3 seconds)
     search_docs = []
     for i, query in enumerate(search_queries):
@@ -2167,7 +2167,7 @@ async def arxiv_search_async(search_queries, load_max_docs=5, get_full_documents
             # Add delay between requests (3 seconds per ArXiv's rate limit)
             if i > 0:  # Don't delay the first request
                 await asyncio.sleep(3.0)
-            
+          $
             result = await process_single_query(query)
             search_docs.append(result)
         except Exception as e:
@@ -2181,12 +2181,12 @@ async def arxiv_search_async(search_queries, load_max_docs=5, get_full_documents
                 'results': [],
                 'error': str(e)
             })
-            
+          $
             # Add additional delay if we hit a rate limit error
             if "429" in str(e) or "Too Many Requests" in str(e):
                 print("ArXiv rate limit exceeded. Adding additional delay...")
                 await asyncio.sleep(5.0)  # Add a longer delay if we hit a rate limit
-    
+  $
     return search_docs
 
 @traceable
@@ -2205,7 +2205,7 @@ async def pubmed_search_async(search_queries, top_k_results=5, email=None, api_k
         List[dict]: List of search responses from PubMed, one per query. Each response has format:
             {
                 'query': str,                    # The original search query
-                'follow_up_questions': None,      
+                'follow_up_questions': None,    $
                 'answer': None,
                 'images': [],
                 'results': [                     # List of search results
@@ -2220,11 +2220,11 @@ async def pubmed_search_async(search_queries, top_k_results=5, email=None, api_k
                 ]
             }
     """
-    
+  $
     async def process_single_query(query):
         try:
             # print(f"Processing PubMed query: '{query}'")
-            
+          $
             # Create PubMed wrapper for the query
             wrapper = PubMedAPIWrapper(
                 top_k_results=top_k_results,
@@ -2232,40 +2232,40 @@ async def pubmed_search_async(search_queries, top_k_results=5, email=None, api_k
                 email=email if email else "your_email@example.com",
                 api_key=api_key if api_key else ""
             )
-            
+          $
             # Run the synchronous wrapper in a thread pool
             loop = asyncio.get_event_loop()
-            
+          $
             # Use wrapper.lazy_load instead of load to get better visibility
             docs = await loop.run_in_executor(None, lambda: list(wrapper.lazy_load(query)))
-            
+          $
             print(f"Query '{query}' returned {len(docs)} results")
-            
+          $
             results = []
             # Assign decreasing scores based on the order
             base_score = 1.0
             score_decrement = 1.0 / (len(docs) + 1) if docs else 0
-            
+          $
             for i, doc in enumerate(docs):
                 # Format content with metadata
                 content_parts = []
-                
+              $
                 if doc.get('Published'):
                     content_parts.append(f"Published: {doc['Published']}")
-                
+              $
                 if doc.get('Copyright Information'):
                     content_parts.append(f"Copyright Information: {doc['Copyright Information']}")
-                
+              $
                 if doc.get('Summary'):
                     content_parts.append(f"Summary: {doc['Summary']}")
-                
+              $
                 # Generate PubMed URL from the article UID
                 uid = doc.get('uid', '')
                 url = f"https://pubmed.ncbi.nlm.nih.gov/{uid}/" if uid else ""
-                
+              $
                 # Join all content parts with newlines
                 content = "\n".join(content_parts)
-                
+              $
                 result = {
                     'title': doc.get('Title', ''),
                     'url': url,
@@ -2274,7 +2274,7 @@ async def pubmed_search_async(search_queries, top_k_results=5, email=None, api_k
                     'raw_content': doc.get('Summary', '')
                 }
                 results.append(result)
-            
+          $
             return {
                 'query': query,
                 'follow_up_questions': None,
@@ -2288,7 +2288,7 @@ async def pubmed_search_async(search_queries, top_k_results=5, email=None, api_k
             print(error_msg)
             import traceback
             print(traceback.format_exc())  # Print full traceback for debugging
-            
+          $
             return {
                 'query': query,
                 'follow_up_questions': None,
@@ -2297,32 +2297,32 @@ async def pubmed_search_async(search_queries, top_k_results=5, email=None, api_k
                 'results': [],
                 'error': str(e)
             }
-    
+  $
     # Process all queries with a reasonable delay between them
     search_docs = []
-    
+  $
     # Start with a small delay that increases if we encounter rate limiting
     delay = 1.0  # Start with a more conservative delay
-    
+  $
     for i, query in enumerate(search_queries):
         try:
             # Add delay between requests
             if i > 0:  # Don't delay the first request
                 # print(f"Waiting {delay} seconds before next query...")
                 await asyncio.sleep(delay)
-            
+          $
             result = await process_single_query(query)
             search_docs.append(result)
-            
+          $
             # If query was successful with results, we can slightly reduce delay (but not below minimum)
             if result.get('results') and len(result['results']) > 0:
                 delay = max(0.5, delay * 0.9)  # Don't go below 0.5 seconds
-            
+          $
         except Exception as e:
             # Handle exceptions gracefully
             error_msg = f"Error in main loop processing PubMed query '{query}': {str(e)}"
             print(error_msg)
-            
+          $
             search_docs.append({
                 'query': query,
                 'follow_up_questions': None,
@@ -2331,10 +2331,10 @@ async def pubmed_search_async(search_queries, top_k_results=5, email=None, api_k
                 'results': [],
                 'error': str(e)
             })
-            
+          $
             # If we hit an exception, increase delay for next query
             delay = min(5.0, delay * 1.5)  # Don't exceed 5 seconds
-    
+  $
     return search_docs
 
 @traceable
@@ -2403,11 +2403,11 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
     api_key = os.environ.get("GOOGLE_API_KEY")
     cx = os.environ.get("GOOGLE_CX")
     use_api = bool(api_key and cx)
-    
+  $
     # Handle case where search_queries is a single string
     if isinstance(search_queries, str):
         search_queries = [search_queries]
-    
+  $
     # Define user agent generator
     def get_useragent():
         """Generates a random user agent string."""
@@ -2416,25 +2416,25 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
         ssl_mm_version = f"SSL-MM/{random.randint(1, 2)}.{random.randint(3, 5)}"
         openssl_version = f"OpenSSL/{random.randint(1, 3)}.{random.randint(0, 4)}.{random.randint(0, 9)}"
         return f"{lynx_version} {libwww_version} {ssl_mm_version} {openssl_version}"
-    
+  $
     # Create executor for running synchronous operations
     executor = None if use_api else concurrent.futures.ThreadPoolExecutor(max_workers=5)
-    
+  $
     # Use a semaphore to limit concurrent requests
     semaphore = asyncio.Semaphore(5 if use_api else 2)
-    
+  $
     async def search_single_query(query):
         async with semaphore:
             try:
                 results = []
-                
+              $
                 # API-based search
                 if use_api:
                     # The API returns up to 10 results per request
                     for start_index in range(1, max_results + 1, 10):
                         # Calculate how many results to request in this batch
                         num = min(10, max_results - (start_index - 1))
-                        
+                      $
                         # Make request to Google Custom Search API
                         params = {
                             'q': query,
@@ -2451,9 +2451,9 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
                                     error_text = await response.text()
                                     print(f"API error: {response.status}, {error_text}")
                                     break
-                                    
+                                  $
                                 data = await response.json()
-                                
+                              $
                                 # Process search results
                                 for item in data.get('items', []):
                                     result = {
@@ -2464,14 +2464,14 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
                                         "raw_content": item.get('snippet', '')
                                     }
                                     results.append(result)
-                        
+                      $
                         # Respect API quota with a small delay
                         await asyncio.sleep(0.2)
-                        
+                      $
                         # If we didn't get a full page of results, no need to request more
                         if not data.get('items') or len(data.get('items', [])) < num:
                             break
-                
+              $
                 # Web scraping based search
                 else:
                     # Add delay between requests
@@ -2487,7 +2487,7 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
                             fetched_results = 0
                             fetched_links = set()
                             search_results = []
-                            
+                          $
                             while fetched_results < max_results:
                                 # Send request to Google
                                 resp = requests.get(
@@ -2509,27 +2509,27 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
                                     }
                                 )
                                 resp.raise_for_status()
-                                
+                              $
                                 # Parse results
                                 soup = BeautifulSoup(resp.text, "html.parser")
                                 result_block = soup.find_all("div", class_="ezO2md")
                                 new_results = 0
-                                
+                              $
                                 for result in result_block:
                                     link_tag = result.find("a", href=True)
                                     title_tag = link_tag.find("span", class_="CVA68e") if link_tag else None
                                     description_tag = result.find("span", class_="FrIlee")
-                                    
+                                  $
                                     if link_tag and title_tag and description_tag:
                                         link = unquote(link_tag["href"].split("&")[0].replace("/url?q=", ""))
-                                        
+                                      $
                                         if link in fetched_links:
                                             continue
-                                        
+                                      $
                                         fetched_links.add(link)
                                         title = title_tag.text
                                         description = description_tag.text
-                                        
+                                      $
                                         # Store result in the same format as the API results
                                         search_results.append({
                                             "title": title,
@@ -2538,42 +2538,42 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
                                             "score": None,
                                             "raw_content": description
                                         })
-                                        
+                                      $
                                         fetched_results += 1
                                         new_results += 1
-                                        
+                                      $
                                         if fetched_results >= max_results:
                                             break
-                                
+                              $
                                 if new_results == 0:
                                     break
-                                    
+                                  $
                                 start += 10
                                 time.sleep(1)  # Delay between pages
-                            
+                          $
                             return search_results
-                                
+                              $
                         except Exception as e:
                             print(f"Error in Google search for '{query}': {str(e)}")
                             return []
-                    
+                  $
                     # Execute search in thread pool
                     loop = asyncio.get_running_loop()
                     search_results = await loop.run_in_executor(
                         executor, 
                         lambda: google_search(query, max_results)
                     )
-                    
+                  $
                     # Process the results
                     results = search_results
-                
+              $
                 # If requested, fetch full page content asynchronously (for both API and web scraping)
                 if include_raw_content and results:
                     content_semaphore = asyncio.Semaphore(3)
-                    
+                  $
                     async with aiohttp.ClientSession() as session:
                         fetch_tasks = []
-                        
+                      $
                         async def fetch_full_content(result):
                             async with content_semaphore:
                                 url = result['url']
@@ -2581,14 +2581,14 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
                                     'User-Agent': get_useragent(),
                                     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
                                 }
-                                
+                              $
                                 try:
                                     await asyncio.sleep(0.2 + random.random() * 0.6)
                                     async with session.get(url, headers=headers, timeout=10) as response:
                                         if response.status == 200:
                                             # Check content type to handle binary files
                                             content_type = response.headers.get('Content-Type', '').lower()
-                                            
+                                          $
                                             # Handle PDFs and other binary files
                                             if 'application/pdf' in content_type or 'application/octet-stream' in content_type:
                                                 # For PDFs, indicate that content is binary and not parsed
@@ -2606,14 +2606,14 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
                                     print(f"Warning: Failed to fetch content for {url}: {str(e)}")
                                     result['raw_content'] = f"[Error fetching content: {str(e)}]"
                                 return result
-                        
+                      $
                         for result in results:
                             fetch_tasks.append(fetch_full_content(result))
-                        
+                      $
                         updated_results = await asyncio.gather(*fetch_tasks)
                         results = updated_results
                         print(f"Fetched full content for {len(results)} results")
-                
+              $
                 return {
                     "query": query,
                     "follow_up_questions": None,
@@ -2630,14 +2630,14 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
                     "images": [],
                     "results": []
                 }
-    
+  $
     try:
         # Create tasks for all search queries
         search_tasks = [search_single_query(query) for query in search_queries]
-        
+      $
         # Execute all searches concurrently
         search_results = await asyncio.gather(*search_tasks)
-        
+      $
         return search_results
     finally:
         # Only shut down executor if it was created
@@ -2647,33 +2647,33 @@ async def google_search_async(search_queries: Union[str, List[str]], max_results
 async def scrape_pages(titles: List[str], urls: List[str]) -> str:
     """
     Scrapes content from a list of URLs and formats it into a readable markdown document.
-    
+  $
     This function:
     1. Takes a list of page titles and URLs
     2. Makes asynchronous HTTP requests to each URL
     3. Converts HTML content to markdown
     4. Formats all content with clear source attribution
-    
+  $
     Args:
         titles (List[str]): A list of page titles corresponding to each URL
         urls (List[str]): A list of URLs to scrape content from
-        
+      $
     Returns:
         str: A formatted string containing the full content of each page in markdown format,
              with clear section dividers and source attribution
     """
-    
+  $
     # Create an async HTTP client
     async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:
         pages = []
-        
+      $
         # Fetch each URL and convert to markdown
         for url in urls:
             try:
                 # Fetch the content
                 response = await client.get(url)
                 response.raise_for_status()
-                
+              $
                 # Convert HTML to markdown if successful
                 if response.status_code == 200:
                     # Handle different content types
@@ -2687,43 +2687,43 @@ async def scrape_pages(titles: List[str], urls: List[str]) -> str:
                         pages.append(f"Content type: {content_type} (not converted to markdown)")
                 else:
                     pages.append(f"Error: Received status code {response.status_code}")
-        
+      $
             except Exception as e:
                 # Handle any exceptions during fetch
                 pages.append(f"Error fetching URL: {str(e)}")
-        
+      $
         # Create formatted output 
         formatted_output = f"Search results: \n\n"
-        
+      $
         for i, (title, url, page) in enumerate(zip(titles, urls, pages)):
             formatted_output += f"\n\n--- SOURCE {i+1}: {title} ---\n"
             formatted_output += f"URL: {url}\n\n"
             formatted_output += f"FULL CONTENT:\n {page}"
             formatted_output += "\n\n" + "-" * 80 + "\n"
-        
+      $
     return  formatted_output
 
 @tool
 async def duckduckgo_search(search_queries: List[str]):
     """Perform searches using DuckDuckGo with retry logic to handle rate limits
-    
+  $
     Args:
         search_queries (List[str]): List of search queries to process
-        
+      $
     Returns:
         List[dict]: List of search results
     """
-    
+  $
     async def process_single_query(query):
         # Execute synchronous search in the event loop's thread pool
         loop = asyncio.get_event_loop()
-        
+      $
         def perform_search():
             max_retries = 3
             retry_count = 0
             backoff_factor = 2.0
             last_exception = None
-            
+          $
             while retry_count <= max_retries:
                 try:
                     results = []
@@ -2734,16 +2734,16 @@ async def duckduckgo_search(search_queries: List[str]):
                             delay = backoff_factor ** retry_count + random.random()
                             print(f"Retry {retry_count}/{max_retries} for query '{query}' after {delay:.2f}s delay")
                             time.sleep(delay)
-                            
+                          $
                             # Add a random element to the query to bypass caching/rate limits
                             modifiers = ['about', 'info', 'guide', 'overview', 'details', 'explained']
                             modified_query = f"{query} {random.choice(modifiers)}"
                         else:
                             modified_query = query
-                        
+                      $
                         # Execute search
                         ddg_results = list(ddgs.text(modified_query, max_results=5))
-                        
+                      $
                         # Format results
                         for i, result in enumerate(ddg_results):
                             results.append({
@@ -2753,7 +2753,7 @@ async def duckduckgo_search(search_queries: List[str]):
                                 'score': 1.0 - (i * 0.1),  # Simple scoring mechanism
                                 'raw_content': result.get('body', '')
                             })
-                        
+                      $
                         # Return successful results
                         return {
                             'query': query,
@@ -2767,12 +2767,12 @@ async def duckduckgo_search(search_queries: List[str]):
                     last_exception = e
                     retry_count += 1
                     print(f"DuckDuckGo search error: {str(e)}. Retrying {retry_count}/{max_retries}")
-                    
+                  $
                     # If not a rate limit error, don't retry
                     if "Ratelimit" not in str(e) and retry_count >= 1:
                         print(f"Non-rate limit error, stopping retries: {str(e)}")
                         break
-            
+          $
             # If we reach here, all retries failed
             print(f"All retries failed for query '{query}': {str(last_exception)}")
             # Return empty results but with query info preserved
@@ -2784,7 +2784,7 @@ async def duckduckgo_search(search_queries: List[str]):
                 'results': [],
                 'error': str(last_exception)
             }
-            
+          $
         return await loop.run_in_executor(None, perform_search)
 
     # Process queries with delay between them to reduce rate limiting
@@ -2796,18 +2796,18 @@ async def duckduckgo_search(search_queries: List[str]):
         if i > 0:
             delay = 2.0 + random.random() * 2.0  # Random delay 2-4 seconds
             await asyncio.sleep(delay)
-        
+      $
         # Process the query
         result = await process_single_query(query)
         search_docs.append(result)
-        
+      $
         # Safely extract URLs and titles from results, handling empty result cases
         if result['results'] and len(result['results']) > 0:
             for res in result['results']:
                 if 'url' in res and 'title' in res:
                     urls.append(res['url'])
                     titles.append(res['title'])
-    
+  $
     # If we got any valid URLs, scrape the pages
     if urls:
         return await scrape_pages(titles, urls)
@@ -2819,12 +2819,12 @@ async def duckduckgo_search(search_queries: List[str]):
 async def tavily_search(queries: List[str], max_results: int = 5, topic: Literal["general", "news", "finance"] = "general") -> str:
     """
     Fetches results from Tavily search API.
-    
+  $
     Args:
         queries (List[str]): List of search queries
         max_results (int): Maximum number of results to return
         topic (Literal["general", "news", "finance"]): Topic to filter results by
-        
+      $
     Returns:
         str: A formatted string of search results
     """
@@ -2838,7 +2838,7 @@ async def tavily_search(queries: List[str], max_results: int = 5, topic: Literal
 
     # Format the search results directly using the raw_content already provided
     formatted_output = f"Search results: \n\n"
-    
+  $
     # Deduplicate results by URL
     unique_results = {}
     for response in search_results:
@@ -2846,7 +2846,7 @@ async def tavily_search(queries: List[str], max_results: int = 5, topic: Literal
             url = result['url']
             if url not in unique_results:
                 unique_results[url] = result
-    
+  $
     # Format the unique results
     for i, (url, result) in enumerate(unique_results.items()):
         formatted_output += f"\n\n--- SOURCE {i+1}: {result['title']} ---\n"
@@ -2855,7 +2855,7 @@ async def tavily_search(queries: List[str], max_results: int = 5, topic: Literal
         if result.get('raw_content'):
             formatted_output += f"FULL CONTENT:\n{result['raw_content'][:30000]}"  # Limit content size
         formatted_output += "\n\n" + "-" * 80 + "\n"
-    
+  $
     if unique_results:
         return formatted_output
     else:
@@ -2866,10 +2866,10 @@ async def tavily_search(queries: List[str], max_results: int = 5, topic: Literal
 async def azureaisearch_search(queries: List[str], max_results: int = 5, topic: str = "general") -> str:
     """
     Fetches results from Azure AI Search API.
-    
+  $
     Args:
         queries (List[str]): List of search queries
-        
+      $
     Returns:
         str: A formatted string of search results
     """
@@ -2883,7 +2883,7 @@ async def azureaisearch_search(queries: List[str], max_results: int = 5, topic: 
 
     # Format the search results directly using the raw_content already provided
     formatted_output = f"Search results: \n\n"
-    
+  $
     # Deduplicate results by URL
     unique_results = {}
     for response in search_results:
@@ -2891,7 +2891,7 @@ async def azureaisearch_search(queries: List[str], max_results: int = 5, topic: 
             url = result['url']
             if url not in unique_results:
                 unique_results[url] = result
-    
+  $
     # Format the unique results
     for i, (url, result) in enumerate(unique_results.items()):
         formatted_output += f"\n\n--- SOURCE {i+1}: {result['title']} ---\n"
@@ -2900,7 +2900,7 @@ async def azureaisearch_search(queries: List[str], max_results: int = 5, topic: 
         if result.get('raw_content'):
             formatted_output += f"FULL CONTENT:\n{result['raw_content'][:30000]}"  # Limit content size
         formatted_output += "\n\n" + "-" * 80 + "\n"
-    
+  $
     if unique_results:
         return formatted_output
     else:
@@ -2912,15 +2912,15 @@ async def azureaisearch_search(queries: List[str], max_results: int = 5, topic: 
 
 async def select_and_execute_search(search_api: str, query_list: list[str], params_to_pass: dict) -> str:
     """Select and execute the appropriate search API.
-    
+  $
     Args:
         search_api: Name of the search API to use
         query_list: List of search queries to execute
         params_to_pass: Parameters to pass to the search API
-        
+      $
     Returns:
         Formatted string containing search results
-        
+      $
     Raises:
         ValueError: If an unsupported search API is specified
     """

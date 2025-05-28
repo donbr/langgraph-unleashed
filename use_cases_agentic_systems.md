@@ -4,11 +4,11 @@
 
 ---
 
-## Knowledge Graph Overview
+## Overview
 
-This knowledge graph captures the essential use cases, capabilities, and architectural patterns for agentic systems, derived from analysis of LangGraph implementations, production deployments, and community projects.
+This document captures the essential use cases, capabilities, and architectural patterns for agentic systems, derived from analysis of LangGraph implementations, production deployments, and community projects.
 
-**Graph Structure**: 20 entities connected by 24 relationships across 4 major categories.
+**Overall Structure**: 20 entities connected by 24 relationships across 4 major categories.
 
 ---
 

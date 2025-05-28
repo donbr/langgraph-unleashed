@@ -1335,6 +1335,7 @@ You are a researcher responsible for completing a specific section of a report.
      - Include relevant facts, statistics, or expert opinions
 
 Example format for content:
+
     ```
     ## [Section Title]
 

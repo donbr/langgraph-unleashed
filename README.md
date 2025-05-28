@@ -1,17 +1,17 @@
 # LangGraph - Unleashed
 
-## Two architectures. Zero bullshit. Pure performance insights.
+## Two architectures. Zero bullshit. Pure insight.
 
 ---
 
 ## The Real Deal
 
-Cut through the LangGraph hype.
+Cut through the hype.
 
 This isn't another theoretical comparison. This is **verified analysis** of two real-world LangGraph implementations.
 
 > [!important]
-> **Evidence-Based Analysis**: Real codebases. Documented architectures. Verifiable deployment patterns from actual LangGraph projects.
+> **Evidence-Based Analysis**: Real codebases. Documented architectures. Verifiable implementation patterns from actual LangGraph projects.
 
 ## The Analysis
 
@@ -20,10 +20,10 @@ This isn't another theoretical comparison. This is **verified analysis** of two 
 **Verified comparison of enterprise vs. local LangGraph deployment patterns.**
 
 **What you get:**
-- Evidence-based analysis of architectural trade-offs in production systems
+- Evidence-based analysis of architectural trade-offs for both prototype and production systems
 - Local deployment patterns validated by the [local-deep-researcher](https://github.com/langchain-ai/local-deep-researcher) project (7.5k stars)
 - Enterprise complexity insights from [open-deep-research](https://github.com/langchain-ai/open_deep_research) (3.5k stars)
-- Search API integration strategies documented in production codebases
+- Search API integration strategies
 - LLM integration approaches used by companies like [LinkedIn, Uber, Replit, and Elastic](https://blog.langchain.dev/is-langgraph-used-in-production/)
 
 ---

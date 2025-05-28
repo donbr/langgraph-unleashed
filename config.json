@@ -1,15 +1,15 @@
 {
   "title": "LangGraph Unleashed",
   "description": "Two architectures. Zero bullshit. Pure performance insights. Professional analysis by Don Branson, Certified AI Engineer with 20+ years enterprise experience.",
-  "logo": "don-avatar.png",
+  "logo": "avatar.png",
   "navbarTitle": {
-    "logo": "don-avatar.png", 
+    "logo": "avatar.png", 
     "text": "LangGraph Unleashed"
   },
   "author": {
     "name": "Don Branson",
     "url": "https://github.com/donbr",
-    "logo": "don-avatar.png"
+    "logo": "avatar.png"
   },
   "showSidebar": true,
   "theme": "light",

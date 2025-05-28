@@ -31,9 +31,9 @@ This isn't another theoretical comparison. This is **verified analysis** of two 
 ## What's Inside
 
 ### 🎯 **Production-Tested Patterns**
-- Verified comparison of 21KB (local) vs. 117KB (enterprise) implementations
+- Verified comparison of 21 KB (local) vs. 117 KB (enterprise) implementations
 - Multi-agent coordination patterns from documented LangGraph projects
-- Cost analysis grounded in actual [LangGraph Platform pricing](https://www.langchain.com/pricing-langgraph-platform): $0.0007/min (dev) to $0.0036/min (prod)
+- Cost analysis grounded in actual [LangGraph Platform pricing](https://www.langchain.com/pricing-langgraph-platform), with pricing ranging from $0.0007/min for dev to $0.0036/min for prod
 
 ### ⚡ **Architecture Reality Checks**  
 - Local vs. cloud deployment trade-offs based on documented implementations
@@ -75,5 +75,4 @@ This analysis is based on:
 **Ready for evidence-based AI architecture insights?**
 
 - 🔗 [LinkedIn](https://www.linkedin.com/in/donbranson/) - Professional network
-- 💻 [GitHub](https://github.com/donbr) - Code and projects  
-- 🤗 [Hugging Face](https://huggingface.co/dwb2023) - AI models and datasets
+- 💻 [GitHub Pages](https://donbr.github.io/) - Code and projects

@@ -17,7 +17,7 @@ This isn't another theoretical comparison. This is **117KB of enterprise complex
 
 ## The Analysis
 
-### ⚡ [LangGraph Deep Research: A Tale of Two Architectures](langgraph_research_assistants.md)
+### ⚡ [LangGraph Deep Research: A Tale of Two Architectures](langgraph_deep_research.md)
 
 **The truth about enterprise vs. local LangGraph deployments.**
 
@@ -91,7 +91,7 @@ This isn't another theoretical comparison. This is **117KB of enterprise complex
 4. **Deploy confidently** → Patterns that actually work
 
 > [!done]
-> **Stop guessing. Start knowing.** → [Architecture Analysis](langgraph_research_assistants.md)
+> **Stop guessing. Start knowing.** → [Architecture Analysis](langgraph_deep_research.md)
 
 ---
 

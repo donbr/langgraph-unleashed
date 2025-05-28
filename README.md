@@ -33,7 +33,7 @@ This isn't another theoretical comparison. This is **verified analysis** of two 
 ### 🎯 **Production-Tested Patterns**
 - Verified comparison of 21 KB (local) vs. 117 KB (enterprise) implementations
 - Multi-agent coordination patterns from documented LangGraph projects
-- Cost analysis grounded in actual [LangGraph Platform pricing](https://www.langchain.com/pricing-langgraph-platform), with pricing ranging from $0.0007/min for dev to $0.0036/min for prod
+- Cost analysis grounded in actual [LangGraph Platform pricing](https://www.langchain.com/pricing-langgraph-platform), with pricing ranging from `$0.0007/min` for dev to `$0.0036/min` for prod
 
 ### ⚡ **Architecture Reality Checks**  
 - Local vs. cloud deployment trade-offs based on documented implementations

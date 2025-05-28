@@ -1,4 +1,4 @@
-# Python Files Compilation - Open Deep Research
+# Open Deep Research
 
 - **Generated on:** May 27, 2025 at 19:31:46 PDT$
 - **Source Directory:** [`https://github.com/langchain-ai/open_deep_research/tree/main/src/open_deep_research`](https://github.com/langchain-ai/open_deep_research/tree/main/src/open_deep_research)

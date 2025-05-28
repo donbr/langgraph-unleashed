@@ -1,6 +1,6 @@
 # LangGraph - Unleashed
 
-## Two architectures. Zero bullshit. Pure insight.
+## Two architectures. Zero BS. Pure insight.
 
 ---
 

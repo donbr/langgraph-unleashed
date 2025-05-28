@@ -2,97 +2,78 @@
 
 ## Two architectures. Zero bullshit. Pure performance insights.
 
-*Professional analysis by Don Branson, Certified AI Engineer*
-
 ---
 
 ## The Real Deal
 
-Cut through the LangGraph hype. I've architected AI solutions across **enterprise environments** for 20+ years, and I'm here to tell you what actually works in production.
+Cut through the LangGraph hype.
 
-This isn't another theoretical comparison. This is **117KB of enterprise complexity vs. 21KB of local genius** - analyzed by someone who's deployed both approaches and lived with the consequences.
+This isn't another theoretical comparison. This is **verified analysis** of two real-world LangGraph implementations.
 
 > [!important]
-> **No Marketing Speak**: Real codebases. Real performance data. Real deployment insights from actual enterprise environments.
+> **Evidence-Based Analysis**: Real codebases. Documented architectures. Verifiable deployment patterns from actual LangGraph projects.
 
 ## The Analysis
 
 ### ⚡ [LangGraph Deep Research: A Tale of Two Architectures](langgraph_deep_research.md)
 
-**The truth about enterprise vs. local LangGraph deployments.**
+**Verified comparison of enterprise vs. local LangGraph deployment patterns.**
 
 **What you get:**
-- Brutal honesty about when enterprise complexity actually pays off
-- Local deployment patterns that survive production contact  
-- Search API strategies tested across multiple industries
-- LLM integration approaches that scale (and ones that don't)
-- Performance insights from real enterprise constraints
-
-**No fluff. Just results.**
-
----
-
-## Why Listen to Me?
-
-**Don Branson** - AI Engineer & Solutions Architect  
-📍 Southern California | 🏆 20+ Years Enterprise AI
-
-**Battle-Tested Across Industries:**
-- Travel & Transportation systems
-- Healthcare/Life Sciences platforms  
-- Public Sector implementations
-- Telecommunications infrastructure
-
-**Current Certifications:**
-- Microsoft Azure AI Engineer & Solutions Architect
-- AWS Generative AI Essentials, Developer, Solutions Architect  
-- AI Makerspace Certified AI Engineer
-- Neo4j Certified Professional, Graph Data Science
-- IBM watsonx.ai, Enterprise Design Thinking
-
-**The Bottom Line:** I've seen what works and what creates expensive operational nightmares. This analysis saves you from learning the hard way.
+- Evidence-based analysis of architectural trade-offs in production systems
+- Local deployment patterns validated by the [local-deep-researcher](https://github.com/langchain-ai/local-deep-researcher) project (7.5k stars)
+- Enterprise complexity insights from [open-deep-research](https://github.com/langchain-ai/open_deep_research) (3.5k stars)
+- Search API integration strategies documented in production codebases
+- LLM integration approaches used by companies like [LinkedIn, Uber, Replit, and Elastic](https://blog.langchain.dev/is-langgraph-used-in-production/)
 
 ---
 
 ## What's Inside
 
-### 🎯 **Production Reality**
-- When the 21KB solution outperforms the 117KB "enterprise" version
-- Multi-agent patterns that scale vs. ones that create support tickets
-- Cost analysis that goes beyond API pricing fantasies
+### 🎯 **Production-Tested Patterns**
+- Verified comparison of 21KB (local) vs. 117KB (enterprise) implementations
+- Multi-agent coordination patterns from documented LangGraph projects
+- Cost analysis grounded in actual [LangGraph Platform pricing](https://www.langchain.com/pricing-langgraph-platform): $0.0007/min (dev) to $0.0036/min (prod)
 
-### ⚡ **Performance Truth**  
-- Local vs. cloud deployment reality checks
-- Integration strategies that survive enterprise IT requirements
-- Scalability patterns from actual production loads
+### ⚡ **Architecture Reality Checks**  
+- Local vs. cloud deployment trade-offs based on documented implementations
+- Integration strategies validated by open-source projects with 10K+ combined stars
+- Maintenance patterns from real-world deployments
 
-### 🔧 **Implementation Reality**
-- What works when the demos stop and real users start
-- Deployment approaches that pass security reviews
-- Maintenance overhead you won't see in the marketing materials
-
----
-
-## Connect
-
-**Ready for honest AI architecture insights?**
-
-- 🔗 [LinkedIn](https://www.linkedin.com/in/donbranson/) - Professional network
-- 💻 [GitHub](https://github.com/donbr) - Code and projects  
-- 🤗 [Hugging Face](https://huggingface.co/dwb2023) - AI models and datasets
+### 🔧 **Documented Implementation Patterns**
+- Analysis based on actual LangGraph codebases available on GitHub
+- Deployment approaches documented in official LangGraph Platform guides
+- Architectural decisions from verified production use cases
 
 ---
 
 ## Get Started
 
-1. **Read the analysis** → Real architectural trade-offs, no sugar-coating
-2. **Apply the frameworks** → Decision criteria tested in production  
-3. **Choose wisely** → Avoid expensive architectural mistakes
-4. **Deploy confidently** → Patterns that actually work
-
-> [!done]
-> **Stop guessing. Start knowing.** → [Architecture Analysis](langgraph_deep_research.md)
+1. **Read the analysis** → Evidence-based architectural insights, no marketing fluff
+2. **Examine the source material** → Actual codebases and documentation
+3. **Verify the claims** → All assertions backed by documented implementations
+4. **Apply the frameworks** → Decision criteria tested against real projects
 
 ---
 
-*Updated with insights from active enterprise deployments. No theory. Just results.*
+## Sources and Verification
+
+This analysis is based on:
+- [LangChain AI's Open Deep Research](https://github.com/langchain-ai/open_deep_research) (3.5k stars, 117KB codebase)
+- [LangChain AI's Local Deep Researcher](https://github.com/langchain-ai/local-deep-researcher) (7.5k stars, 21KB codebase)
+- [Official LangGraph documentation](https://langchain-ai.github.io/langgraph/)
+- [LangGraph Platform pricing and deployment guides](https://www.langchain.com/langgraph-platform)
+- [Production usage case studies](https://blog.langchain.dev/is-langgraph-used-in-production/)
+
+> [!done]
+> **Verified insights. Real architectures. Documented results.** → [Architecture Analysis](langgraph_deep_research.md)
+
+---
+
+## Connect
+
+**Ready for evidence-based AI architecture insights?**
+
+- 🔗 [LinkedIn](https://www.linkedin.com/in/donbranson/) - Professional network
+- 💻 [GitHub](https://github.com/donbr) - Code and projects  
+- 🤗 [Hugging Face](https://huggingface.co/dwb2023) - AI models and datasets

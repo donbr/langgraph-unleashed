@@ -17,7 +17,7 @@ This isn't another theoretical comparison. This is **117KB of enterprise complex
 
 ## The Analysis
 
-### ⚡ [LangGraph Research Assistants: A Tale of Two Architectures](langgraph_research_assistants.md)
+### ⚡ [LangGraph Deep Research: A Tale of Two Architectures](langgraph_research_assistants.md)
 
 **The truth about enterprise vs. local LangGraph deployments.**
 

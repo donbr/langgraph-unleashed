@@ -1,4 +1,4 @@
-# LangGraph Research Assistants: A Tale of Two Architectures
+# LangGraph Deep Research: A Tale of Two Architectures
 
 *Exploring enterprise complexity vs. local simplicity in AI research systems*
 

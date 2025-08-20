@@ -4,6 +4,9 @@
 - **Source Directory:** [`https://github.com/langchain-ai/local-deep-researcher/tree/main/src/ollama_deep_researcher`](https://github.com/langchain-ai/local-deep-researcher/tree/main/src/ollama_deep_researcher)
 - **Total Files:** 6 Python files
 
+### NOTE - August 20, 2025
+- The recent gpt-oss models do not support JSON mode in Ollama. Select use_tool_calling in the configuration to use tool calling instead of JSON mode.
+
 ---
 
 ## File Index
